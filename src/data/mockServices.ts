@@ -35,7 +35,7 @@ export const mockServices: PublicService[] = [
 
   {
     id: 3,
-    name: 'Vignette Autoi',
+    name: 'Vignette Auto',
     category: 'Taxes',
     description: 'Paiement de la Vignette annuelle .',
     image: '/PhotosServices/CHROMA.jpg',
