@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "30150997598",
+    "project_id": "futaplus-a3638",
+    "storage_bucket": "futaplus-a3638.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:30150997598:android:f8f5fc622dbcde2026e6cf",
+        "android_client_info": {
+          "package_name": "com.futaplus.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9l9NieGGk83IJD_eoJJBMqB1hlzrIH6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

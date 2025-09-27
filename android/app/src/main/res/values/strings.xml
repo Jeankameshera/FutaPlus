@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">FuTa+_App</string>
+    <string name="title_activity_main">FuTa+_App</string>
+    <string name="package_name">com.futaplus.app</string>
+    <string name="custom_url_scheme">com.futaplus.app</string>
+</resources>
