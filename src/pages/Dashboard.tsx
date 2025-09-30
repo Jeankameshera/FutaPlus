@@ -4,6 +4,11 @@ import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import BottomNav from '@/components/BottomNav';
+import { FiDroplet } from 'react-icons/fi'; // Icône pour l'eau
+import { FiZap } from 'react-icons/fi'; // Icône pour l'électricité
+import { FaWifi } from "react-icons/fa"; // ou FaGlobe pour autre style
+import { FaCar } from "react-icons/fa"; // Icône pour la voiture  
+import { BiTv } from "react-icons/bi";
 
 import {
   Menu as MenuIcon,
@@ -19,15 +24,11 @@ import {
 
 import { useProfileStore } from '@/stores/useProfileStore';  // Import Zustand (Pour charger la photo de profile)
 
-
-
-
 const Dashboard = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
-
   const profileImage = useProfileStore((state) => state.profileImage);  // Récupère image dynamique
 
   // Fermer le menu en cliquant hors menu
@@ -104,7 +105,7 @@ const Dashboard = () => {
 
               <button
                 onClick={() => {
-                  navigate('/configuration');
+                  navigate('/settings');
                   setShowMenu(false);
                 }}
                 className="flex items-center gap-3 w-full px-4 py-3 text-sm hover:bg-orange-50 transition"
@@ -146,27 +147,77 @@ const Dashboard = () => {
           <p className="text-gray-400 italic">Sélectionnez un service pour effectuer un paiement</p>
         </div>
 
-        {/* === Cartes de services avec navigation directe === */}
+        {/* === Cartes de services avec navigation directe === */}        
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-           {/* == la premiere carte eau et elec== */}
+           {/* == la Premiere carte eau == */}          
           <Card onClick={() => navigate('/regideso')} className="hover:shadow-md transition-shadow cursor-pointer">
             <CardContent className="bg-gray-100 p-6">
               <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white text-xl mr-4">💧</div>
-                <div>
-                  <h3 className="font-medium text-lg">Eau / Electricité</h3>
-                  <p className="text-sm text-gray-500">Paiement des factures d'eau et d'électricité</p>
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-2xl mr-4 shadow-md">
+                  <FiDroplet />
                 </div>
-              </div>
+               <div>
+                 <h3 className="font-semibold text-lg text-gray-800">Eau</h3>
+                 <p className="text-sm text-gray-500">Paiement des factures d'eau et d'électricité</p>
+               </div>
+             </div>
             </CardContent>
           </Card>
+          
+          {/* == la Deuxiemme carte pour le Cash power (Electricité)*/}
 
-          {/* == la deuxieme carte pour la vignette == */}
-          <Card onClick={() => navigate('/VignetteAuto')} className="hover:shadow-md transition-shadow cursor-pointer">
+          <Card onClick={() => navigate('/cashpower')} className="hover:shadow-md transition-shadow cursor-pointer">
+            <CardContent className="bg-gray-100 p-6">
+               <div className="flex items-center">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br
+                    from-yellow-400 to-orange-500 flex items-center justify-center
+                     text-white text-2xl mr-4 shadow-md">
+                    <FiZap />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg text-gray-800">Cash Power Électricité</h3>
+                    <p className="text-sm text-gray-500">Achat de crédit d’électricité prépayée (Cash Power)</p>
+                  </div>
+               </div>
+             </CardContent>
+         </Card>
+
+          {/* == la Troisieme carte pour la vignette == */}
+         <Card 
+           onClick={() => navigate('/Internet')} 
+            className="hover:shadow-lg transition-shadow cursor-pointer"
+          >
+         <CardContent className="bg-gray-100 p-6">
+            <div className="flex items-center">
+                 {/* Icône ronde */}
+                <div className="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center 
+                  text-white text-2xl mr-4">
+                  <FaWifi /> 
+                </div>
+
+                {/* Texte */}
+                <div>
+                  <h3 className="font-medium text-lg">Internet</h3>
+                  <p className="text-sm text-gray-500">Abonnement mensuel internet</p>
+                </div>
+              </div>
+           </CardContent>
+         </Card>
+          {/* == la Quatriemecarte pour la vignette auto == */}
+
+          <Card 
+            onClick={() => navigate('/Vignette')} 
+             className="hover:shadow-md transition-shadow cursor-pointer"
+             >
             <CardContent className="bg-gray-100 p-6">
               <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white text-xl mr-4">🚗</div>
+                {/* Icône ronde */}
+                <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center
+                  text-white text-xl mr-4">
+                     <FaCar/>
+                 </div>                 
+                {/* Texte */}
                 <div>
                   <h3 className="font-medium text-lg">Vignette Auto</h3>
                   <p className="text-sm text-gray-500">Paiement de la vignette annuelle</p>
@@ -174,40 +225,50 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-
-          {/* == la troisieme carte pour l'internet == */}
-          <Card onClick={() => navigate('/Internet')} className="hover:shadow-md transition-shadow cursor-pointer">
+          
+          {/* Cinquieme carte pour la TV */}
+          <Card onClick={() => navigate('/Tv')} className="hover:shadow-md transition-shadow cursor-pointer">
             <CardContent className="bg-gray-100 p-6">
               <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center text-white text-xl mr-4">🌐</div>
+                <div className="w-12 h-12 rounded-full bg-pink-500 flex items-center 
+                justify-center text-white text-xl mr-4">
+                  <BiTv />
+                </div>
                 <div>
-                  <h3 className="font-medium text-lg">Internet</h3>
-                  <p className="text-sm text-gray-500">Abonnement mensuel internet</p>
+                  <h3 className="font-medium text-lg">TV</h3>
+                  <p className="text-sm text-gray-500">Paiement de l'abonnement TV</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* == la quatrieme carte pour les taxes et impôts d'État == */}
-          <Card onClick={() => navigate('/impots')} className="hover:shadow-md transition-shadow cursor-pointer">
+          
+          {/* == la Sixieme carte pour les taxes et impôts d'État == */}
+          <Card onClick={() => navigate('/impot')} className="hover:shadow-md transition-shadow cursor-pointer">
             <CardContent className="bg-gray-100 p-6">
               <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-red-500 flex items-center justify-center text-white text-xl mr-4">📑</div>
+                <div className="w-12 h-12 rounded-full bg-red-500 flex items-center justify-center
+                 text-white text-xl mr-4">
+                  <FileText />
+                </div>
+                 {/* Texte */}        
                 <div>
                   <h3 className="font-medium text-lg">Impôts</h3>
                   <p className="text-sm text-gray-500">Taxes et impôts d'État</p>
                 </div>
               </div>
             </CardContent>
-          </Card>      
+          </Card> 
 
-          
-          { /* == la cinquiemme carte pour les transports publics  == */ }
+          { /* == la Septieme  carte pour les transports publics  == */ }
 
           <Card onClick={() => navigate('/transport')} className="hover:shadow-md transition-shadow cursor-pointer">
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xl mr-4">🚌</div>
+                <div className="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center 
+                text-white text-xl mr-4">
+                 
+                </div>
                 <div>
                   <h3 className="font-medium text-lg">Transport</h3>
                   <p className="text-sm text-gray-500">Paiement des transports publics</p>
@@ -215,6 +276,9 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
+
+         
+
         </div>
       </div>
 

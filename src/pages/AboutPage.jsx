@@ -23,7 +23,7 @@ export default function AboutPage() {
            >
              <ArrowLeft className="w-5 h-5 mr-1" />
             <span className="font-semibold text-md  ">Retour</span>
-            <span className='font-semibold text-md'>Bonjour</span>
+          
         </button>
 
         <motion.div
@@ -37,10 +37,11 @@ export default function AboutPage() {
         <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">Version 1.0.0</p>
 
         <p className="text-gray-700 dark:text-gray-200 mb-6 leading-relaxed text-justify font-inter text-[10px]">
-          FUTA+ est une application innovante qui simplifie et sécurise le paiement des services publics tels que la 
-          <strong> REGIDESO (CashPower, Factures)</strong>, <strong> la Vignette Auto</strong>, 
-          <strong> les Impôts</strong>, <strong>l'internet</strong> et bien plus encore, 
-          le tout en quelques clics, où que vous soyez.
+          FUTA+ est une application innovante et sécurisée qui révolutionne le paiement des services publics au Burundi. 
+          Elle permet de régler facilement vos factures et abonnements tels que la REGIDESO (CashPower et factures d’eau 
+          et d’électricité), la Vignette Auto, les Impôts, l’Internet et bien d’autres services essentiels. Avec FUTA+, 
+          vous gagnez du temps, évitez les files d’attente et gérez tous vos paiements en quelques clics, où que vous 
+          soyez et à tout moment.
         </p>
 
         <div className="mb-5">

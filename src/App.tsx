@@ -11,25 +11,23 @@ import {
 } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-//import Services from "./pages/Services";
 import ServiceDetail from "./pages/ServiceDetail";
-
 import Payment from "./pages/Payment";
 import PaymentHistory from "./pages/PaymentHistory";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
-import VignetteAuto from "./pages/VignetteAuto";
-import Snel from "./pages/Snel";
 import AboutPage from "./pages/AboutPage";
 import SettingsPage from "./pages/SettingsPage";
-import Internet from "./pages/Internet";
 import ServicesScreen from "./pages/ServicesScreen";
-import Services from "./pages/Services";
-import RegidesoForm from '@/services/RegidesoForm';
-
+import RegidesoForm from './services/RegidesoForm';
+import CashPowerForm from "./services/CashPowerForm";
+import TvForm from "./services/TvForm";
+import InternetForm from "./services/InternetForm";
+import ImpotForm from "./services/ImpotForm";
+import TransportForm from "./services/TransportForm";
+import ObrForm from "./services/ObrForm"; //ceci est la page de la vignette auto
 const queryClient = new QueryClient();
 
 const PageLoader = () => (
@@ -64,22 +62,25 @@ const AppRoutes = ({ initialRoute }: { initialRoute: string }) => {
         <Route path="/" element={<Navigate to={initialRoute} replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/services" element={<Services />} />
+        <Route path="/dashboard" element={<Dashboard />} />        
         <Route path="/service/:id" element={<ServiceDetail />} />
         <Route path="/payment/:serviceId" element={<Payment />} />
         <Route path="/history" element={<PaymentHistory />} />
-        <Route path="/profile" element={<Profile />} />        
-        <Route path="/vignetteauto" element={<VignetteAuto />} />
-        <Route path="/snel" element={<Snel />} />
+        <Route path="/profile" element={<Profile />} />     
         <Route path="/about" element={<AboutPage />} />
         <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/internet" element={<Internet />} />
+        <Route path="/internet" element={<InternetForm />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
         <Route path="/servicesscreen" element={<ServicesScreen />} />
         <Route path="/regideso" element={<RegidesoForm />} />
-
+        <Route path="/cashpower" element={<CashPowerForm />} />
+        <Route path="/tv" element={<TvForm/>} />
         <Route path="/service-detail/:id" element={<ServiceDetail />} />
+        <Route path="/impot" element={<ImpotForm />} />
+        <Route path="/transport" element={<TransportForm />} />
+        <Route path="/Vignette" element={<ObrForm />} /> 
+        
+
 
       </Routes>
     </>

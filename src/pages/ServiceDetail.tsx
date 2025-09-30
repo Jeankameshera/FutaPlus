@@ -2,9 +2,12 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import RegidesoForm from '@/services/RegidesoForm';
 import ObrForm from '@/services/ObrForm';
-import OnatelForm from '@/services/OnatelForm';
 import CashPowerForm from '@/services/CashPowerForm';
-
+import TvForm from '@/services/TvForm';
+import InternetForm from '@/services/InternetForm';
+import ImpotForm from '@/services/ImpotForm';
+import TransportForm from '../services/TransportForm';
+      
 const ServiceDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -13,18 +16,20 @@ const ServiceDetail: React.FC = () => {
   const renderForm = () => {
     switch (id) {
       case '1':
-        return <RegidesoForm />;
+        return <RegidesoForm />;  // Formulaire personnalisé pour Regideso
       case '2':
-        return <CashPowerForm />;
-      
+        return <CashPowerForm />;       // Formulaire personnalisé pour Cash Power
       case '3':
-        return <ObrForm />;
+        return <InternetForm />;  // Formulaire générique pour Internet
       case '4':
-        return <OnatelForm />;
+        return <TvForm />;  // Formulaire personnalisé pour Tv
+      case '5':
+        return <ImpotForm />;  // Formulaire personnalisé pour l'impot
+      case '6':
+        return <ObrForm />;  // Formulaire personnalisé pour vignette               
+      case '7':
+        return <TransportForm />; // Formulaire générique pour transport        
       
-
-        
-      // ajoute les autres services ici
 
 
       default:        

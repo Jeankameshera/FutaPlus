@@ -1,165 +1,236 @@
+// src/pages/CashPowerForm.jsx
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import BottomNav from '@/components/BottomNav';
 
-const CashPowerForm: React.FC = () => {
-  // États pour gérer chaque donnée du formulaire
+export default function CashPowerForm() {
+  const navigate = useNavigate();
+
   const [step, setStep] = useState(1);
-  const [meterNumber, setMeterNumber] = useState('');
-  const [amount, setAmount] = useState('');
+  const [fournisseur, setFournisseur] = useState('REGIDESO');
+  const [compteur, setCompteur] = useState('');
+  const [montant, setMontant] = useState('');
+  const [kwh, setKwh] = useState(0);
   const [phone, setPhone] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [pin, setPin] = useState('');
+  const [token, setToken] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Étape suivante avec animation de chargement si on passe à l'étape 2
+  const prixParKwh = 500; // BIF par kWh
+
   const handleNext = () => {
-    if (step === 1) {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        setStep(2);
-      }, 1500); // Simule un chargement de 1.5 sec
-    } else if (step === 2) {
-      setStep(3);
+    setError('');
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+
+      switch (step) {
+        case 1:
+          setStep(2);
+          break;
+        case 2:
+          if (!/^\d+$/.test(compteur)) {
+            setError('Le numéro de compteur doit contenir uniquement des chiffres.');
+            return;
+          }
+          setStep(3);
+          break;
+        case 3:
+          if (!/^\d+$/.test(montant) || Number(montant) <= 0) {
+            setError('Veuillez entrer un montant valide.');
+            return;
+          }
+          setKwh(Number(montant) / prixParKwh);
+          setStep(4);
+          break;
+        case 4:
+          setStep(5);
+          break;
+        case 5:
+          if (!phone || !pin) {
+            setError('Veuillez entrer votre numéro de téléphone et votre PIN.');
+            return;
+          }
+          // Génération du code Cash Power simulé
+          
+         const generatedToken = Math.floor(100000000 + Math.random() * 900000000);
+         setToken(generatedToken.toString());
+          setStep(6);
+          break;
+        case 6:
+          resetForm();
+          navigate('/dashboard');
+          break;
+        default:
+          break;
+      }
+    }, 1000);
+  };
+
+  const handlePrev = () => {
+    if (step > 1) {
+      setError('');
+      setStep(step - 1);
     }
   };
 
-  // Finaliser la simulation du paiement
-  const handleConfirm = () => {
-    console.log("Paiement confirmé :", {
-      meterNumber,
-      amount,
-      phone,
-      paymentMethod,
-    });
-    alert("Paiement en cours...");
-    // Tu peux envoyer ces infos vers une API 
+  const goBackToDashboard = () => navigate('/dashboard');
+
+  const resetForm = () => {
+    setStep(1);
+    setCompteur('');
+    setMontant('');
+    setKwh(0);
+    setPhone('');
+    setPin('');
+    setToken('');
+    setError('');
+  };
+
+  const stepVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded shadow">
+    <div className="max-w-md mx-auto mt-5 bg-white shadow-xl rounded-xl p-8 space-y-6 relative">
+     
 
-        {/* ÉTAPE 1 - Saisie des infos */}
-      {step === 1 && (
-        <form onSubmit={(e) => { e.preventDefault(); handleNext(); }} className="space-y-4">
-          <h2 className="text-xl font-bold mb-4">Paiement Cash Power</h2>
+      <h1 className="text-3xl font-bold text-center">Cash Power Electricité</h1>
 
-          <div>
-            <label className="block text-sm font-medium 
-            ">Numéro du compteur</label>
-            <input
-              type="text"
-              value={meterNumber}
-              onChange={(e) => setMeterNumber(e.target.value)}
-              required
-              className="w-full border px-4 py-2 rounded"
-            />
-          </div>
+      <div className="flex justify-center space-x-2">
+        {[1, 2, 3, 4, 5, 6].map(n => (
+          <div key={n} className={`w-4 h-4 rounded-full ${step >= n ? 'bg-orange-400' : 'bg-gray-300'}`} />
+        ))}
+      </div>
 
-          <div>
-            <label className="block text-sm font-medium">Montant (BIF)</label>
-            <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-              className="w-full border px-4 py-2 rounded"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Numéro de téléphone</label>
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-              placeholder="+257 61 23 45 67"
-              className="w-full border px-4 py-2 rounded"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="bg-orange-600 text-white 
-            px-4 py-2 rounded hover:bg-orange-700"
-          >
-            Suivant
-          </button>
-        </form>
-      )}
-
-      {/* ÉTAPE 2 - Vérification avec chargement */}
-      {step === 2 && (
-        <div className="space-y-4">
-          {loading ? (
-            <div className="text-center py-10">Chargement...</div>
-          ) : (
-            <>
-              <h2 className="text-xl font-bold">Vérification</h2>
-              <p><strong>Compteur :</strong> {meterNumber}</p>
-              <p><strong>Montant :</strong> {amount} BIF</p>
-              <p><strong>Téléphone :</strong> {phone}</p>
-
-              <div className="flex gap-4 mt-4">
-                <button
-                  onClick={() => setStep(1)}
-                  className="bg-gray-400 text-white px-4 py-2 rounded"
-                >
-                  Retour
-                </button>
-                <button
-                  onClick={handleNext}
-                  className="bg-orange-600 text-white px-4 py-2 rounded"
-                >
-                  Continuer
-                </button>
+      <AnimatePresence mode="wait">
+        <motion.div key={step} variants={stepVariants} initial="hidden" animate="visible" exit="exit" className="space-y-4">
+          
+          {step === 1 && (
+            <div className="space-y-2">
+              <p className="font-semibold">Voulez-vous acheter du Cash Power ?</p>
+              <div className="bg-gray-100 rounded-lg p-3">
+                <p>Fournisseur : {fournisseur}</p>
               </div>
-            </>
+            </div>
           )}
+
+          {step === 2 && (
+            <div className="space-y-2">
+              <p className="font-semibold">Entrez votre numéro de compteur</p>
+              <input
+                type="text"
+                value={compteur}
+                onChange={e => setCompteur(e.target.value)}
+                placeholder="Ex: 12345678"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              />
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="space-y-2">
+              <p className="font-semibold">Montant à acheter</p>
+              <input
+                type="text"
+                value={montant}
+                onChange={e => setMontant(e.target.value)}
+                placeholder="Ex: 10000 BIF"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              />
+            </div>
+          )}
+
+          {step === 4 && (
+            <div className="space-y-2">
+              <p className="font-semibold">Résumé de votre achat</p>
+              <p><strong>Fournisseur :</strong> {fournisseur}</p>
+              <p><strong>Numéro compteur :</strong> {compteur}</p>
+              <p><strong>Montant :</strong> {montant} BIF</p>
+              <p><strong>Quantité :</strong> {kwh} kWh</p>
+            </div>
+          )}
+
+          {step === 5 && (
+            <div className="space-y-2">
+              <p className="font-semibold text-center">Validation</p>
+              <p className="text-sm text-gray-500 text-center">Saisissez votre numéro de téléphone et 
+                votre PIN pour valider le paiement</p>
+              <input
+                type="text"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                placeholder="Numéro de téléphone"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-center"
+              />
+              <input
+                type="password"
+                value={pin}
+                onChange={e => setPin(e.target.value)}
+                placeholder="PIN"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2
+                 focus:ring-black text-center mt-2 tracking-widest"
+              />
+            </div>
+          )}
+
+          {step === 6 && (
+            <div className="space-y-2">
+              <p className="font-semibold text-center text-green-600">Paiement effectué avec succès !</p>
+              <p className="text-center">Voici votre code Cash Power :</p>
+              <p className="text-center font-mono text-xl">{token}</p>
+              <p className="text-center text-gray-500">{kwh} kWh sera crédité sur votre compteur</p>
+            </div>
+          )}
+
+        </motion.div>
+      </AnimatePresence>
+
+      {error && <p className="text-red-500 whitespace-pre-line text-sm">{error}</p>}
+
+      {isLoading && (
+        <div className="flex justify-center">
+          <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-8 w-8"></div>
         </div>
       )}
 
+      <div className="flex justify-between space-x-4">
+        {step > 1 && step < 6 && (
+          <button
+            onClick={handlePrev}
+            disabled={isLoading}
+            className="w-1/2 bg-gray-300 text-orange-500 py-2 rounded-full font-semibold
+            hover:bg-gray-400 transition disabled:opacity-50"
+          >
+            Précédent
+          </button>
+        )}
+        <button
+          onClick={handleNext}
+          disabled={isLoading}
+          className={`w-full ${step > 1 && step < 6 ? 'w-1/2' : 'w-full'} bg-orange-400 
+          text-white py-2 rounded-full font-semibold hover:bg-orange-500 transition disabled:opacity-50`}
+        >
+          {step < 6 ? 'Suivant' : 'Terminer'}
+        </button>
+      </div>
 
-
-
-
- {      /* ÉTAPE 3 - Choix du mode de paiement */}
-      {step === 3 && (
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold">Mode de paiement</h2>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Sélectionner un moyen :</label>
-            <select
-              value={paymentMethod}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-              required
-              className="w-full border px-4 py-2 rounded"
-            >
-              <option value="">-- Choisir --</option>
-              <option value="Ecocash">Ecocash</option>
-              <option value="Lumicash">Lumicash</option>
-              <option value="Smart Pay">Smart Pay</option>
-            </select>
-          </div>
-
-          <div className="flex gap-4">
-            <button
-              onClick={() => setStep(2)}
-              className="bg-gray-400 text-white px-4 py-2 rounded"
-            >
-              Retour
-            </button>
-            <button
-              onClick={handleConfirm}
-              className="bg-green-600 text-white px-4 py-2 rounded"
-            >
-              Confirmer le paiement
-            </button>
-          </div>
-        </div>
-      )}
+      <BottomNav />
+      <style>{`
+        .loader {
+          border-top-color: #f97316;
+          animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
-};
-
-export default CashPowerForm;
+}

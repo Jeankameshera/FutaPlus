@@ -14,6 +14,8 @@ export default function RegidesoForm() {
   const [selectedFactures, setSelectedFactures] = useState([]);
   const [montant, setMontant] = useState('');
   const [modePaiement, setModePaiement] = useState('');
+  const [numeroTelephone, setNumeroTelephone] = useState('');
+  const [validationCode, setValidationCode] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -33,7 +35,6 @@ export default function RegidesoForm() {
             setError("Le numéro de compteur doit contenir uniquement des chiffres.");
             return;
           }
-
           setFactures([
             { id: 1, mois: 'Avril', montant: 10000 },
             { id: 2, mois: 'Mars', montant: 9500 },
@@ -64,7 +65,18 @@ export default function RegidesoForm() {
           setStep(6);
           break;
         case 6:
-          alert("Paiement effectué avec succès !");
+          setStep(7);
+          break;
+        case 7:
+          if (!numeroTelephone) {
+            setError("Veuillez entrer le numéro de téléphone de votre portefeuille.");
+            return;
+          }
+          if (!validationCode) {
+            setError("Veuillez entrer votre code PIN pour valider l’action.");
+            return;
+          }
+          alert("Paiement validé avec succès !");
           resetForm();
           break;
         default:
@@ -105,6 +117,8 @@ export default function RegidesoForm() {
     setSelectedFactures([]);
     setMontant('');
     setModePaiement('');
+    setNumeroTelephone('');
+    setValidationCode('');
     setError('');
   };
 
@@ -117,14 +131,13 @@ export default function RegidesoForm() {
   return (
     <div className="max-w-md mx-auto mt-5 bg-white shadow-xl rounded-xl p-8 space-y-6 relative">
       <button onClick={goBackToDashboard} className="absolute top-4 left-4 flex items-center text-orange-500 hover:text-orange-600 transition">
-        <ArrowLeft className="w-5 h-5 mr-1" />
-        <span className="font-semibold text-md">Retour</span>
+        <ArrowLeft className="w-5 h-5 mr-1" />      
       </button>
 
       <h1 className="text-3xl font-bold text-center">REGIDESO</h1>
 
       <div className="flex justify-center space-x-2">
-        {[1, 2, 3, 4, 5].map(n => (
+        {[1, 2, 3, 4, 5, 6, 7].map(n => (
           <div key={n} className={`w-4 h-4 rounded-full ${step >= n ? 'bg-orange-400' : 'bg-gray-300'}`} />
         ))}
       </div>
@@ -194,8 +207,8 @@ export default function RegidesoForm() {
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
               >                
                 <option value="">-- Sélectionnez --</option>  
-                <option value="Mobile Money">Airtel Money</option>
-                <option value="Mobile Money">Orange Money</option>                
+                <option value="Airtel Money">Airtel Money</option>
+                <option value="Orange Money">Orange Money</option>                
                 <option value="Lumicash">Lumicash</option>
                 <option value="Pesaflash">Pesaflash</option>
               </select>
@@ -211,6 +224,31 @@ export default function RegidesoForm() {
               <p><strong>Mode de paiement:</strong> {modePaiement}</p>
             </div>
           )}
+
+          {step === 7 && (
+            <div className="space-y-2">
+              <p className="font-semibold text-center">Voulez-vous valider cette action ?</p>
+              <p className="text-sm text-gray-500 text-center">Entrez les informations de votre portefeuille</p>
+
+              <input
+                type="text"
+                value={numeroTelephone}
+                onChange={(e) => setNumeroTelephone(e.target.value)}
+                placeholder="Numéro de téléphone"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2
+                focus:ring-black text-center"
+              />
+
+              <input
+                type="password"
+                value={validationCode}
+                onChange={(e) => setValidationCode(e.target.value)}
+                placeholder="PIN"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2
+                focus:ring-black text-center tracking-widest"
+              />
+            </div>
+          )}
         </motion.div>
       </AnimatePresence>
 
@@ -224,20 +262,23 @@ export default function RegidesoForm() {
 
       <div className="flex justify-between space-x-4">
         {step > 1 && (
+
           <button
             onClick={handlePrev}
             disabled={isLoading}
             className="w-1/2 bg-gray-300 text-orange-500 py-2 rounded-full font-semibold hover:bg-gray-400 transition disabled:opacity-50"
           >
             Précédent
+
           </button>
+
         )}
         <button
           onClick={handleNext}
           disabled={isLoading}
           className={`w-full ${step > 1 ? 'w-1/2' : 'w-full'} bg-orange-400 text-white py-2 rounded-full font-semibold hover:bg-orange-500 transition disabled:opacity-50`}
-        >
-          {step < 6 ? 'Suivant' : 'Valider'}
+        >          
+          {step < 7 ? 'Suivant' : 'Valider'}
         </button>
       </div>
 
@@ -255,4 +296,3 @@ export default function RegidesoForm() {
     </div>
   );
 }
-

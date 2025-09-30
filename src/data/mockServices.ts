@@ -16,76 +16,71 @@ export const mockServices: PublicService[] = [
     id: 1,
     name: 'EAU  ',
     category: 'Eau',
-    description: 'Paiement des factures d’eau .',
-    image: '/PhotosServices/CHROMA.jpg',        // Image à placer dans /public/images
+    description: 'Paiement des factures d’eau .', // ok
+    image: '/PhotosServices/Eau.jpg',        // Image à placer dans /public/images
     slug: 'regideso',
     customForm: true,                          // Utilise RegidesoForm.tsx
   },
 
   {
     id: 2,
-    name: 'CASH POWER (Electricité)',
+    name: 'CASH POWER (Electricité)',  //ok
     category: 'Électricité',
     description: 'Achat de crédit d’électricité prépayée (Cash Power).',
-    image: '/PhotosServices/cashpower.jpg',
+    image: '/PhotosServices/Elec.jpg',
     slug: 'cashpower',
     customForm: true,                  // Utilise CashPowerForm.tsx
   },
 
-
-  {
+{
     id: 3,
-    name: 'Vignette Auto',
-    category: 'Taxes',
-    description: 'Paiement de la Vignette annuelle .',
-    image: '/PhotosServices/CHROMA.jpg',
-    slug: 'Vignette',
-    customForm: true,                  // Utilise ObrForm.tsx
-  },
-  {
-    id: 4,
-    name: 'CNSS',
-    category: 'Sécurité Sociale',
-    description: 'Déclaration et paiement des cotisations sociales.',
-    image: '/PhotosServices/regideso.jpg',
-    slug: 'cnss',
-    customForm: true,                  // Utilise CnssForm.tsx
-  },
-  {
-    id: 5,
-    name: '',
-    category: '',
-    description: '',
-    image: '',
+    name: 'Internet',
+    category: 'Connexion internet',
+    description: 'Paiement de vos connexion internet ', // ok
+    image: '/PhotosServices/Wifi.jpg',
     slug: '',
     customForm: false,                 // Utilise formulaire générique
   },
+
+ {
+    id: 4,
+    name: 'Tv',
+    category: 'Divertissement',
+    description: 'paiement de l abonnement canal', // ok
+    image: '/PhotosServices/Tv2.jpg',
+    slug: 'Tv',
+    customForm: true,                  // Utilise TvForm.tsx
+  },
+
+ 
   
   {
-    id: 6,
-    name: '',
-    category: '',
-    description: '',
-    image: '',
-    slug: '',
+    id: 5,
+     name: 'IMPOTS',
+    category: 'Impôts',
+    description: 'Paiement des impôts divers.',
+    image: '/PhotosServices/jambo.jpg',
+    slug: 'impots',
     customForm: false,
   },
+
+ {
+    id: 6,
+    name: 'Vignette Auto',
+    category: 'Taxes',
+    description: 'Paiement de la Vignette annuelle .',
+    image: '/PhotosServices/car3.jpg',
+    slug: 'Vignette',
+    customForm: true,                  // Utilise ObrForm.tsx
+  },
+
   {
     id: 7,
     name: 'TRANSPORT',
     category: 'Transport',
     description: 'Paiement des droits de transport et enregistrement.',
-    image: '/images/amotrans.png',
+    image: '/PhotosServices/tCHROMA.jpg',
     slug: 'amotrans',
     customForm: false,
   },
-  {
-    id: 8,
-    name: 'IMPOTS',
-    category: 'Impôts',
-    description: 'Paiement des impôts divers.',
-    image: '/images/impots.png',
-    slug: 'impots',
-    customForm: false,
-  }
 ];
