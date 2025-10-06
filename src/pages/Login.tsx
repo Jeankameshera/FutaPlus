@@ -1,13 +1,10 @@
-
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
+import api from '@/api/api';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -16,74 +13,60 @@ const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-
-  // se connecter avec E-mail ou numéro et password
+  // Login with email and password
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    setTimeout(() => {
-      if (email === 'kamesherajean@gmail.com' && password === '1234') {
+    try {
+      const response = await api.post('/login', { email, password });
+      console.log('Login response:', response.data); 
+      if (response.data.success) {
+        const { token, user } = response.data;
+        localStorage.setItem('token', token);
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('userEmail', email);
-
+        localStorage.setItem('userRole', user.role || 'client'); 
+        console.log('Token stored:', token);
+        
         toast({
           title: 'Connexion réussie',
           description: 'Bienvenue sur votre application de paiement',
         });
         navigate('/dashboard');
       } else {
+        throw new Error(response.data.error || 'Login failed');
+      }
+    } catch (err: any) {
+      console.error('Login error:', err); 
+      toast({
+        title: 'Erreur de connexion',
+        description: err.response?.data?.error || 'Identifiants incorrects. Veuillez réessayer.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Password reset
+  const handleForgotPassword = async () => {
+    const userEmail = prompt("Entrez votre adresse email pour réinitialiser votre mot de passe :");
+    if (userEmail) {
+      try {
+        const response = await api.post('/reset-password', { email: userEmail });
         toast({
-          title: 'Erreur de connexion',
-          description: 'Identifiants incorrects. Veuillez réessayer.',
+          title: 'Email envoyé',
+          description: response.data.success || `Un lien de réinitialisation a été envoyé à ${userEmail}`,
+        });
+      } catch (err: any) {
+        toast({
+          title: 'Erreur',
+          description: err.response?.data?.error || 'Échec de la demande de réinitialisation',
           variant: 'destructive',
         });
       }
-      setLoading(false);
-    }, 1000);
-  };
-
-   // Connexion via Google
-  const handleGoogleLogin = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      navigate('/home');
-    } catch (error) {
-      toast({
-        title: 'Erreur Google',
-        description: 'Échec de la connexion avec Google.',
-        variant: 'destructive',
-      });
     }
-  };
-
-   // Connexion via Facebook
-  const handleFacebookLogin = async () => {
-    try {
-      const provider = new FacebookAuthProvider();
-      await signInWithPopup(auth, provider);
-      navigate('/home');
-    } catch (error) {
-      toast({
-        title: 'Erreur Facebook',
-        description: 'Échec de la connexion avec Facebook.',
-        variant: 'destructive',
-      });
-    }
-  };
-
-   // Réinitialisation du mot de passe
-  const handleForgotPassword = () => {
-    const userEmail = prompt("Entrez votre adresse email pour réinitialiser votre mot de passe :");
-    if (userEmail) {
-
-      // ici on fais appel au service de reset, genre service de réinitialisation (ex : Firebase, ou backend custom)
-      toast({
-        title: "Email envoyé",
-        description: `Un lien de réinitialisation a été envoyé à ${userEmail}`,
-      });
-    } 
   };
 
   return (
@@ -95,7 +78,7 @@ const Login = () => {
             <p className="text-sm text-white/80 mt-2">Payez vos factures facilement</p>
           </div>
 
-           {/* Login form */}
+          {/* Login form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <Label htmlFor="email" className="text-white">Email / Téléphone</Label>
@@ -114,10 +97,12 @@ const Login = () => {
               <div className="flex justify-between items-center">
                 <Label htmlFor="password" className="text-white">Mot de passe</Label>
                 <button
-                type="button"
-                onClick={handleForgotPassword}
-                className="text-sm text-orange-400 hover:underline">Forgot password</button>
-
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="text-sm text-orange-400 hover:underline"
+                >
+                  Forgot password
+                </button>
               </div>
               <Input
                 id="password"
@@ -139,23 +124,10 @@ const Login = () => {
             </Button>
           </form>
 
-           {/* === Connexion avec Google ou Facebook === */}
-          <div className="my-6 flex items-center justify-center text-sm text-white/80">
-            <span className="px-2">Ou continuer avec</span>
-          </div>
-
-           {/* === Google  === */}
-          <div className="flex justify-center gap-4">
-          <FcGoogle onClick={handleGoogleLogin} className="text-3xl cursor-pointer" />          
-
-           {/* ===  Facebook === */}
-          <FaFacebook onClick={handleFacebookLogin} className="text-3xl text-white cursor-pointer" />
-        </div>
-
-         {/* === Signg up === */}
+          {/* Link to registration */}
           <div className="mt-6 text-center text-sm">
             <p>
-              Pas encore de compte ?{''}
+              Pas encore de compte ?{' '}
               <Link to="/register" className="underline text-orange-400 font-medium">
                 Créer un compte
               </Link>

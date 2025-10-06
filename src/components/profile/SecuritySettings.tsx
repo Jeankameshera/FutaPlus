@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Shield } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import api from '@/api/api';
 
 interface SecuritySettingsProps {
   currentPassword: string;
@@ -21,13 +21,13 @@ const SecuritySettings = ({
   confirmPassword,
   setCurrentPassword,
   setNewPassword,
-  setConfirmPassword
+  setConfirmPassword,
 }: SecuritySettingsProps) => {
   const { toast } = useToast();
-  
-  const handlePasswordSubmit = (e: React.FormEvent) => {
+
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (newPassword !== confirmPassword) {
       toast({
         title: 'Erreur',
@@ -36,39 +36,63 @@ const SecuritySettings = ({
       });
       return;
     }
-    
-    toast({
-      title: 'Mot de passe mis à jour',
-      description: 'Votre mot de passe a été modifié avec succès.',
-    });
-    
-    // Reset password fields
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
+
+    // Validate password complexity
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(newPassword)) {
+      toast({
+        title: 'Erreur',
+        description: 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    try {
+      const response = await api.post('/change-password', {
+        old_password: currentPassword,
+        new_password: newPassword,
+      });
+      if (response.data.success) {
+        toast({
+          title: 'Mot de passe mis à jour',
+          description: 'Votre mot de passe a été modifié avec succès.',
+        });
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      } else {
+        throw new Error(response.data.error || 'Failed to change password');
+      }
+    } catch (err: any) {
+      toast({
+        title: 'Erreur',
+        description: err.response?.data?.error || 'Impossible de modifier le mot de passe',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
     <>
       <h3 className="text-lg font-semibold mb-4">Changer le mot de passe</h3>
-      
+
       <form onSubmit={handlePasswordSubmit}>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="currentPassword">Mot de passe actuel</Label>
-            <Input 
-              id="currentPassword" 
-              type="password" 
+            <Input
+              id="currentPassword"
+              type="password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               required
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="newPassword">Nouveau mot de passe</Label>
-            <Input 
-              id="newPassword" 
+            <Input
+              id="newPassword"
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -78,11 +102,11 @@ const SecuritySettings = ({
               Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.
             </p>
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
-            <Input 
-              id="confirmPassword" 
+            <Input
+              id="confirmPassword"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -90,30 +114,29 @@ const SecuritySettings = ({
             />
           </div>
         </div>
-        
-        <div className="mt-6 w-full">
-              <Button
-                type="submit"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-orange-400 hover:bg-blue-700 text-sm sm:text-base px-4 py-2"
-                      >
-                    <Shield className="h-4 w-4" />
-                     Mettre à jour le mot de passe
-              </Button>
-        </div>
 
+        <div className="mt-6 w-full">
+          <Button
+            type="submit"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-orange-400 hover:bg-blue-700 text-sm sm:text-base px-4 py-2"
+          >
+            <Shield className="h-4 w-4" />
+            Mettre à jour le mot de passe
+          </Button>
+        </div>
       </form>
-      
+
       <div className="mt-8 pt-6 border-t">
         <h3 className="text-lg font-semibold mb-4">Sécurité du compte</h3>
-        
+
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 p-4 border rounded-lg">
             <div className="flex items-start gap-3">
               <Shield className="h-5 w-5 text-blue-600 mt-1" />
-                <div>
-                  <p className="font-medium">Authentification à deux facteurs</p>
-                  <p className="text-sm text-gray-500">Protégez votre compte avec une sécurité supplémentaire</p>
-                </div>
+              <div>
+                <p className="font-medium">Authentification à deux facteurs</p>
+                <p className="text-sm text-gray-500">Protégez votre compte avec une sécurité supplémentaire</p>
+              </div>
             </div>
             <Button variant="outline" className="self-start sm:self-auto w-full sm:w-auto">
               Configurer
@@ -122,15 +145,15 @@ const SecuritySettings = ({
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 p-4 border rounded-lg">
             <div className="flex items-start gap-3">
               <Shield className="h-5 w-5 text-blue-600 mt-1" />
-                <div>
-                  <p className="font-medium">Appareils connectés</p>
-                  <p className="text-sm text-gray-500">Gérez les appareils connectés à votre compte</p>
-                </div>
+              <div>
+                <p className="font-medium">Appareils connectés</p>
+                <p className="text-sm text-gray-500">Gérez les appareils connectés à votre compte</p>
+              </div>
             </div>
             <Button variant="outline" className="self-start sm:self-auto w-full sm:w-auto">
-                  Voir
+              Voir
             </Button>
-          </div>           
+          </div>
         </div>
       </div>
     </>
