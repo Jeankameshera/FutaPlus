@@ -83,9 +83,9 @@ Téléphone : ${phone}
             onChange={e => setProvider(e.target.value)}
           >
             <option value="">-- Sélectionner --</option>
+            <option value="BBS">BBS</option>
             <option value="CBINET">CBINET</option>
-            <option value="Onatel">Onatel</option>
-            <option value="Lumitel">Lumitel</option>
+            <option value="Onatel">Onatel</option>            
             <option value="Swiftsat">Swiftsat</option>
             <option value="Starlink">Starlink</option>
           </select>

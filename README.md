@@ -1,73 +1,44 @@
-# Welcome to your Lovable project
+# FUTA+
 
-## Project info
+##  Présentation
 
-**URL**: https://lovable.dev/projects/0d3f9bf7-e5fc-4e77-9110-222449a280ba
+**FUTA+** est une application innovante qui simplifie et sécurise le paiement des services publics au Burundi.  
+Elle permet de régler vos factures d'eau, d'électricité, de TV, d'internet, de vignette auto, ainsi que vos impôts, en quelques clics, où que vous soyez.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## Fonctionnalités principales
 
-**Use Lovable**
+- **Paiement REGIDESO** : CashPower et factures d’eau  
+- **Vignette Auto** : achat et renouvellement  
+- **TV & Internet** : abonnements Canal+, Startimes et services internet  
+- **Impôts** : paiement des différentes taxes et impôts  
+- **Gestion de profil** : création et modification des informations utilisateur  
+- **Interface responsive** : compatible mobile et web  
+- **Animations & UI modernes** : cartes interactives, transitions fluides, composants dynamiques
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/0d3f9bf7-e5fc-4e77-9110-222449a280ba) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+##  Technologies utilisées
 
-**Use your preferred IDE**
+- **Frontend** : React, React Native, Tailwind CSS  
+- **État global** : Zustand  
+- **Navigation** : React Router (web) et React Navigation (mobile)  
+- **Animations & UI** : Framer Motion, react-icons  
+- **Backend / API** : (à compléter si tu as une API ou mock data)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+##  À propos du développeur
 
-Follow these steps:
+**Heri Kameshera Jean** est le développeur principal de FUTA+. 
+Etudiant à l'université chétienne de Bujumbura,
+il est passionné par le développement mobile et web , il a conçu cette application pour simplifier le paiement des services publics au Burundi, en mettant l’accent sur la sécurité, la rapidité et l’expérience utilisateur.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- 🔹 Email : [kamesherajean@gmail.com](mailto:kamesherajean@gmail.com)  
+- 🔹 GitHub : [Jeankameshera](https://github.com/Jeankameshera) 
+-    Facebook [Jean kameshera] (https://www.facebook.com/jean.kameshera) 
+- 🔹 LinkedIn : *()*  
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/0d3f9bf7-e5fc-4e77-9110-222449a280ba) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+```bash
+git clone https://github.com/Jeankameshera/FutaPlus.git

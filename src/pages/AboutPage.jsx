@@ -35,6 +35,8 @@ export default function AboutPage() {
           FuTa+
         </motion.div>
         <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">Version 1.0.0</p>
+        <p className="">je ne sais pas si j'aurais cette Version mon amie</p>
+        <p className='tu '>tu peut demander faustin</p>
 
         <p className="text-gray-700 dark:text-gray-200 mb-6 leading-relaxed text-justify font-inter text-[10px]">
          FUTA+ est une application innovante qui simplifie et sécurise le paiement des services publics tels que la
