@@ -20,13 +20,13 @@ const Login = () => {
 
     try {
       const response = await api.post('/login', { email, password });
-      console.log('Login response:', response.data); 
+      console.log('Login response:', response.data);
       if (response.data.success) {
         const { token, user } = response.data;
         localStorage.setItem('token', token);
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('userEmail', email);
-        localStorage.setItem('userRole', user.role || 'client'); 
+        localStorage.setItem('userRole', user.role || 'client');
         console.log('Token stored:', token);
         
         toast({
@@ -38,7 +38,7 @@ const Login = () => {
         throw new Error(response.data.error || 'Login failed');
       }
     } catch (err: any) {
-      console.error('Login error:', err); 
+      console.error('Login error:', err);
       toast({
         title: 'Erreur de connexion',
         description: err.response?.data?.error || 'Identifiants incorrects. Veuillez réessayer.',
@@ -46,26 +46,6 @@ const Login = () => {
       });
     } finally {
       setLoading(false);
-    }
-  };
-
-  // Password reset
-  const handleForgotPassword = async () => {
-    const userEmail = prompt("Entrez votre adresse email pour réinitialiser votre mot de passe :");
-    if (userEmail) {
-      try {
-        const response = await api.post('/reset-password', { email: userEmail });
-        toast({
-          title: 'Email envoyé',
-          description: response.data.success || `Un lien de réinitialisation a été envoyé à ${userEmail}`,
-        });
-      } catch (err: any) {
-        toast({
-          title: 'Erreur',
-          description: err.response?.data?.error || 'Échec de la demande de réinitialisation',
-          variant: 'destructive',
-        });
-      }
     }
   };
 
@@ -96,13 +76,12 @@ const Login = () => {
             <div>
               <div className="flex justify-between items-center">
                 <Label htmlFor="password" className="text-white">Mot de passe</Label>
-                <button
-                  type="button"
-                  onClick={handleForgotPassword}
+                <Link
+                  to="/forgot-password"
                   className="text-sm text-orange-400 hover:underline"
                 >
-                  Forgot password
-                </button>
+                  Mot de passe oublié ?
+                </Link>
               </div>
               <Input
                 id="password"

@@ -27,7 +27,10 @@ import TvForm from "./services/TvForm";
 import InternetForm from "./services/InternetForm";
 import ImpotForm from "./services/ImpotForm";
 import TransportForm from "./services/TransportForm";
-import ObrForm from "./services/ObrForm"; //ceci est la page de la vignette auto
+import ObrForm from "./services/ObrForm"; 
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+
 const queryClient = new QueryClient();
 
 const PageLoader = () => (
@@ -62,6 +65,8 @@ const AppRoutes = ({ initialRoute }: { initialRoute: string }) => {
         <Route path="/" element={<Navigate to={initialRoute} replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />        
         <Route path="/service/:id" element={<ServiceDetail />} />
         <Route path="/payment/:serviceId" element={<Payment />} />
