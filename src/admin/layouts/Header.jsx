@@ -20,13 +20,7 @@ const Header = ({ userName = "Jean Kameshera", userRole = "Administrateur" }) =>
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Gestion thème
-  useEffect(() => {
-    if (isDarkMode) document.documentElement.classList.add("dark");
-    else document.documentElement.classList.remove("dark");
-  }, [isDarkMode]);
-
-  // Générer initiales
+   // Générer initiales
   const getInitials = (name) => {
     return name
       .split(" ")
@@ -47,15 +41,9 @@ const Header = ({ userName = "Jean Kameshera", userRole = "Administrateur" }) =>
       <h1 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
         Tableau de bord Admin
       </h1>
-
+ 
       <div className="flex items-center gap-4">
-        {/* Recherche */}
-        <input
-          type="text"
-          placeholder="Rechercher..."
-          className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-gray-200"
-        />        
-
+        
         {/* Menu utilisateur */}
         <div className="relative" ref={userMenuRef}>
           <button
