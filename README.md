@@ -1,6 +1,6 @@
-# 💧 FUTA+
+# FUTA+
 
-## 🚀 Présentation
+## Présentation
 
 **FUTA+** est une application innovante conçue pour **simplifier, centraliser et sécuriser le paiement des services publics au Burundi**.  
 Elle permet aux citoyens de régler leurs factures d’eau, d’électricité, de télévision, d’internet, de vignette auto et même leurs impôts, **en quelques clics**, à tout moment et depuis n’importe où.
@@ -9,21 +9,21 @@ L’objectif principal de FUTA+ est d’offrir une **expérience fluide, rapide 
 
 ---
 
-## 🧭 Fonctionnalités principales
+##  Fonctionnalités principales
 
-### 💡 Paiement des services
+### Paiement des services
 - **REGIDESO (Eau & Électricité)** : paiement des factures et CashPower  
 - **Vignette Auto** : achat et renouvellement en ligne  
 - **Abonnements TV & Internet** : gestion de services tels que *Canal+*, *Startimes*, etc.  
 - **Impôts et taxes** : règlement simplifié de différents impôts  
 
-### 👤 Gestion utilisateur
+###  Gestion utilisateur
 - Création et connexion sécurisée  
 - Mise à jour du profil et préférences  
 - Historique des paiements  
 - Notifications de factures à venir  
 
-### ⚙️ Interface & Expérience utilisateur
+###  Interface & Expérience utilisateur
 - **Interface responsive** (Web + Mobile)  
 - **Cartes interactives** et animations fluides  
 - **Tableaux de bord dynamiques** pour les administrateurs  
@@ -32,7 +32,7 @@ L’objectif principal de FUTA+ est d’offrir une **expérience fluide, rapide 
 
 ---
 
-## 🧰 Technologies utilisées
+##  Technologies utilisées
 
 | Catégorie | Technologies |
 |------------|---------------|
@@ -45,23 +45,17 @@ L’objectif principal de FUTA+ est d’offrir une **expérience fluide, rapide 
 
 ---
 
-## 🧩 Modules Admin
+##  Modules Admin
 
-- 🔑 **Attribution des rôles**  
-- 💰 **Validation des paiements**  
-- 🧾 **Gestion des factures (avec export PDF)**  
-- ⚙️ **Gestion des services**  
-- 🔌 **Gestion des compteurs REGIDESO**  
+-  **Attribution des rôles**  
+-  **Validation des paiements**  
+-  **Gestion des factures (avec export PDF)**  
+-  **Gestion des services**  
+-  **Gestion des compteurs REGIDESO**  
 
 ---
 
-## 📸 Aperçus *(optionnel)*
-
-> Tu peux ajouter ici quelques captures d’écran de ton application pour la présentation sur GitHub.
-
-```markdown
-![Dashboard Admin](./src/assets/screens/dashboard.png)
-![Paiement REGIDESO](./src/assets/screens/regideso.png)
+## Aperçus *(optionnel)*
 
 
 ## À propos du développeur
