@@ -122,7 +122,7 @@ const GestionDesCompteurs = () => {
   return (
     <div className="p-4 sm:p-6 bg-gray-100 min-h-screen">
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 mb-4
-       text-gray-700 hover:text-gray-900">
+       text-orange-600 hover:text-orange-800">
         <FaArrowLeft /> Retour
       </button>
 
@@ -176,7 +176,8 @@ const GestionDesCompteurs = () => {
             ))}
             {filteredCounters.length === 0 && (
               <tr>
-                <td colSpan="5" className="p-4 text-center text-gray-500">
+                <td colSpan="5" className=
+                "p-4 text-center text-gray-500">
                   Aucun compteur trouvé
                 </td>
               </tr>

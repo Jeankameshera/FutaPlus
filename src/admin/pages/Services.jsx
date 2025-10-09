@@ -11,18 +11,18 @@ const GestionDesServices = () => {
   const navigate = useNavigate();
 
   const [services, setServices] = useState([
-    { id: 1, name: "REGIDESO", price: 5000, description: "Paiement eau potable", active: true },
-    { id: 2, name: "Vignette Auto", price: 10000, description: "Paiement vignette voiture", active: true },
-    { id: 3, name: "Internet", price: 8000, description: "Paiement Internet", active: false },
+    { id: 1, name: "REGIDESO",  description: "Paiement eau potable", active: true },
+    { id: 2, name: "Vignette Auto", description: "Paiement vignette voiture", active: true },
+    { id: 3, name: "Internet",  description: "Paiement Internet", active: true },
   ]);
 
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingService, setEditingService] = useState(null);
-  const [newServiceData, setNewServiceData] = useState({ name: "", price: "", description: "", active: true });
+  const [newServiceData, setNewServiceData] = useState({ name: "", description: "", active: true });
 
   const openAddModal = () => {
-    setNewServiceData({ name: "", price: "", description: "", active: true });
+    setNewServiceData({ name: "", description: "", active: true });
     setEditingService(null);
     setIsModalOpen(true);
   };
@@ -72,7 +72,7 @@ const GestionDesServices = () => {
       {/* Bouton de retour */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 mb-4 text-gray-700 hover:text-gray-900"
+        className="flex items-center gap-2 mb-4 text-orange-600 hover:text-orange-800"
       >
         <FaArrowLeft /> Retour
       </button>
@@ -93,8 +93,7 @@ const GestionDesServices = () => {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-orange-500 text-white">
-              <th className="p-3">Nom</th>
-              <th className="p-3">Prix</th>
+              <th className="p-3">Nom</th>            
               <th className="p-3">Description</th>
               <th className="p-3">Statut</th>
               <th className="p-3 text-center">Actions</th>
@@ -104,7 +103,6 @@ const GestionDesServices = () => {
             {filteredServices.map(service => (
               <tr key={service.id} className="border-b hover:bg-gray-50 transition-all">
                 <td className="p-3">{service.name}</td>
-                <td className="p-3">{service.price.toLocaleString()} FBu</td>
                 <td className="p-3">{service.description}</td>
                 <td className="p-3">
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${serviceStatusColors[service.active]}`}>
@@ -167,14 +165,7 @@ const GestionDesServices = () => {
               value={newServiceData.name}
               onChange={e => setNewServiceData({ ...newServiceData, name: e.target.value })}
               className="w-full border border-gray-300 rounded-lg p-2 mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-            <input
-              type="number"
-              placeholder="Prix"
-              value={newServiceData.price}
-              onChange={e => setNewServiceData({ ...newServiceData, price: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg p-2 mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
+            />            
             <textarea
               placeholder="Description"
               value={newServiceData.description}

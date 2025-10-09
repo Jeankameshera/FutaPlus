@@ -38,7 +38,7 @@ const Header = ({ userName = "Jean Kameshera", userRole = "Administrateur" }) =>
 
   return (
     <header className="bg-white dark:bg-gray-800 shadow-sm px-6 py-4 flex justify-between items-center transition-colors">
-      <h1 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+      <h1 className="text-xl font-semibold text-gray-800 dark:text-gray-200 ">
         Tableau de bord Admin
       </h1>
  
@@ -68,7 +68,8 @@ const Header = ({ userName = "Jean Kameshera", userRole = "Administrateur" }) =>
                 <li>
                   <Link
                     to="/profile"
-                    className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-gray-600 flex items-center gap-2"
+                    className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 
+                    hover:bg-orange-500 dark:hover:bg-gray-600 flex items-center gap-2"
                   >
                     <UserCircle size={16} /> Profil
                   </Link>
@@ -76,7 +77,8 @@ const Header = ({ userName = "Jean Kameshera", userRole = "Administrateur" }) =>
                 <li>
                   <Link
                     to="/settings"
-                    className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-gray-600 flex items-center gap-2"
+                    className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200
+                     hover:bg-orange-500 dark:hover:bg-gray-600 flex items-center gap-2"
                   >
                     <Settings size={16} /> Paramètres
                   </Link>
@@ -84,7 +86,8 @@ const Header = ({ userName = "Jean Kameshera", userRole = "Administrateur" }) =>
                 <li>
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-gray-600 flex items-center gap-2"
+                    className="w-full text-left px-4 py-2 text-gray-700 
+                    dark:text-gray-200 hover:bg-orange-500 dark:hover:bg-gray-600 flex items-center gap-2"
                   >
                     <LogOut size={16} /> Déconnexion
                   </button>

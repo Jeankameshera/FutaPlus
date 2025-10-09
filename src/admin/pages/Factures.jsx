@@ -6,9 +6,9 @@ import autoTable from 'jspdf-autotable';
 
 
 
-// Si tu as un logo, convertis-le en base64 et colle ici
+// S'il y a un logo on le convertis en base64 et colle ici
 // Exemple : const logo = "data:image/png;base64,...";
-const logo = ""; // <-- mettre ton logo base64 ici si tu veux
+const logo = ""; // <-- mettre ton logo base64 
 
 const statusColors = {
   "Non payé": "bg-red-100 text-red-700",
@@ -21,7 +21,7 @@ const GestionDesFactures = () => {
 
   const [search, setSearch] = useState("");
   const [invoices, setInvoices] = useState([
-    { id: 1, user: "Jean kameshera", email: "jean@gmail.com", service: "REGIDESO", amount: 5000, date: "2025-10-08", status: "Non payé" },
+    { id: 1, user: "Jean kameshera", email: "jean@gmail.com", service: "REGIDESO", amount: 5000, date: "2025-10-08", status: "Payé" },
     { id: 2, user: "Baraka karhagomba", email: "baraka@gmail.com", service: "Vignette Auto", amount: 10000, date: "2025-10-07", status: "Payé" },
     { id: 3, user: "Heri jean", email: "heri@gmail.com", service: "Internet", amount: 8000, date: "2025-10-06", status: "Annulé" },
   ]);
@@ -96,7 +96,7 @@ const GestionDesFactures = () => {
       {/* Bouton de retour */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 mb-4 text-gray-700 hover:text-gray-900"
+        className="flex items-center gap-2 mb-4 text-orange-600 hover:text-orange-800"
       >
         <FaArrowLeft /> Retour
       </button>

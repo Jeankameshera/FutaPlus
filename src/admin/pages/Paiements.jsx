@@ -16,7 +16,7 @@ const ValidationDesPaiements = () => {
     { id: 1, user: "Jean K.", email: "jean@gmail.com", service: "REGIDESO", amount: 5000, date: "2025-10-08", status: "En attente" },
     { id: 2, user: "Baraka K..", email: "baraka@gmail.com", service: "Vignette Auto", amount: 10000, date: "2025-10-07", status: "Validé" },
     { id: 3, user: "Heri Jean", email: "heri@gmail.com", service: "Electricité", amount: 8000, date: "2025-10-06", status: "Refusé" },
-    { id: 4, user: "Sophie ", email: "sophie@gmail.com", service: "REGIDESO", amount: 6000, date: "2025-10-05", status: "En attente" },
+    { id: 4, user: "Izzy Abab ", email: "izzy@gmail.com", service: "REGIDESO", amount: 6000, date: "2025-10-05", status: "En attente" },
   ]);
 
   const updateStatus = (id, newStatus) => {
@@ -38,7 +38,7 @@ const ValidationDesPaiements = () => {
       {/* Bouton de retour */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 mb-4 text-gray-700 hover:text-gray-900"
+        className="flex items-center gap-2 mb-4 text-orange-600 hover:text-orange-800"
       >
         <FaArrowLeft /> Retour
       </button>

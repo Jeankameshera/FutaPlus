@@ -41,7 +41,7 @@ L’objectif principal de FUTA+ est d’offrir une **expérience fluide, rapide 
 | **État global** | Zustand |
 | **UI & Icônes** | Lucide React, React Icons |
 | **Gestion PDF** | jsPDF, jspdf-autotable |
-| **Backend / API** | ** |
+| **Backend / API** | *   * |
 
 ---
 
