@@ -1,44 +1,75 @@
 # FUTA+
 
-##  Présentation
+## Présentation
 
-**FUTA+** est une application innovante qui simplifie et sécurise le paiement des services publics au Burundi.  
-Elle permet de régler vos factures d'eau, d'électricité, de TV, d'internet, de vignette auto, ainsi que vos impôts, en quelques clics, où que vous soyez.
+**FUTA+** est une application innovante conçue pour **simplifier, centraliser et sécuriser le paiement des services publics au Burundi**.  
+Elle permet aux citoyens de régler leurs factures d’eau, d’électricité, de télévision, d’internet, de vignette auto et même leurs impôts, **en quelques clics**, à tout moment et depuis n’importe où.
+
+L’objectif principal de FUTA+ est d’offrir une **expérience fluide, rapide et moderne**, tout en favorisant la **digitalisation des paiements publics** au Burundi.
 
 ---
 
-## Fonctionnalités principales
+##  Fonctionnalités principales
 
-- **Paiement REGIDESO** : CashPower et factures d’eau  
-- **Vignette Auto** : achat et renouvellement  
-- **TV & Internet** : abonnements Canal+, Startimes et services internet  
-- **Impôts** : paiement des différentes taxes et impôts  
-- **Gestion de profil** : création et modification des informations utilisateur  
-- **Interface responsive** : compatible mobile et web  
-- **Animations & UI modernes** : cartes interactives, transitions fluides, composants dynamiques
+### Paiement des services
+- **REGIDESO (Eau & Électricité)** : paiement des factures et CashPower  
+- **Vignette Auto** : achat et renouvellement en ligne  
+- **Abonnements TV & Internet** : gestion de services tels que *Canal+*, *Startimes*, etc.  
+- **Impôts et taxes** : règlement simplifié de différents impôts  
+
+###  Gestion utilisateur
+- Création et connexion sécurisée  
+- Mise à jour du profil et préférences  
+- Historique des paiements  
+- Notifications de factures à venir  
+
+###  Interface & Expérience utilisateur
+- **Interface responsive** (Web + Mobile)  
+- **Cartes interactives** et animations fluides  
+- **Tableaux de bord dynamiques** pour les administrateurs  
+- **Téléchargement de factures en PDF**  
+- **Système de rôles (Admin / Utilisateur)**  
 
 ---
 
 ##  Technologies utilisées
 
-- **Frontend** : React, React Native, Tailwind CSS  
-- **État global** : Zustand  
-- **Navigation** : React Router (web) et React Navigation (mobile)  
-- **Animations & UI** : Framer Motion, react-icons  
-- **Backend / API** : (à compléter si tu as une API ou mock data)
+| Catégorie | Technologies |
+|------------|---------------|
+| **Frontend Web** | React, Tailwind CSS, Framer Motion, React Router |
+| **Frontend Mobile** | React Native (Expo), React Navigation |
+| **État global** | Zustand |
+| **UI & Icônes** | Lucide React, React Icons |
+| **Gestion PDF** | jsPDF, jspdf-autotable |
+| **Backend / API** | *   * |
 
 ---
 
-##  À propos du développeur
+##  Modules Admin
 
-**Heri Kameshera Jean** est le développeur principal de FUTA+. 
-Etudiant à l'université chétienne de Bujumbura,
-il est passionné par le développement mobile et web , il a conçu cette application pour simplifier le paiement des services publics au Burundi, en mettant l’accent sur la sécurité, la rapidité et l’expérience utilisateur.
+-  **Attribution des rôles**  
+-  **Validation des paiements**  
+-  **Gestion des factures (avec export PDF)**  
+-  **Gestion des services**  
+-  **Gestion des compteurs REGIDESO**  
 
-- 🔹 Email : [kamesherajean@gmail.com](mailto:kamesherajean@gmail.com)  
-- 🔹 GitHub : [Jeankameshera](https://github.com/Jeankameshera) 
--    Facebook [Jean kameshera] (https://www.facebook.com/jean.kameshera) 
-- 🔹 LinkedIn : *()*  
+---
 
-```bash
-git clone https://github.com/Jeankameshera/FutaPlus.git
+## Aperçus *(optionnel)*
+
+
+## À propos du développeur
+
+## Heri Kameshera Jean
+Étudiant à l’Université Chrétienne de Bujumbura, passionné par le développement mobile et web.
+Il conçoit des applications alliant esthétique et performance, comme FUTA+, pour répondre aux besoins concrets du quotidien burundais.
+
+## Contact :
+
+## Email : kamesherajean@gmail.com
+
+## LinkedIn : linkedin.com/in/jeankameshera
+
+## GitHub : github.com/Jeankameshera
+
+## Facebook : Jean Kameshera
