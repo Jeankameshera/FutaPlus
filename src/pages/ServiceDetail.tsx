@@ -1,3 +1,4 @@
+// src/pages/ServiceDetail.tsx
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import RegidesoForm from '@/services/RegidesoForm';

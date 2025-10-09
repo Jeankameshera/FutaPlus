@@ -1,18 +1,25 @@
-
+// src/components/payment-history/FilterBar.tsx
 import React from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search, Filter } from 'lucide-react';
+import { Search } from 'lucide-react';
 
 interface FilterBarProps {
   filterPeriod: string;
   setFilterPeriod: (value: string) => void;
+  searchQuery: string;
+  setSearchQuery: (value: string) => void;
 }
 
-const FilterBar: React.FC<FilterBarProps> = ({ filterPeriod, setFilterPeriod }) => {
+const FilterBar: React.FC<FilterBarProps> = ({
+  filterPeriod,
+  setFilterPeriod,
+  searchQuery,
+  setSearchQuery,
+}) => {
   return (
     <div className="flex flex-wrap gap-4 mb-6">
+      {/* Filtre par période */}
       <div className="flex-1">
         <Select value={filterPeriod} onValueChange={setFilterPeriod}>
           <SelectTrigger className="w-full">
@@ -26,14 +33,18 @@ const FilterBar: React.FC<FilterBarProps> = ({ filterPeriod, setFilterPeriod }) 
           </SelectContent>
         </Select>
       </div>
-      
+
+      {/* Recherche */}
       <div className="flex-1">
         <div className="relative">
-          <Input placeholder="Rechercher..." />
+          <Input
+            placeholder="Rechercher..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
           <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
         </div>
       </div>
-     
     </div>
   );
 };

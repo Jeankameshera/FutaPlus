@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { CreditCard, Smartphone, Wallet, Check, ArrowRight } from 'lucide-react';
+import api from '@/api/api';
 
 const Payment = () => {
   const { serviceId } = useParams();
@@ -16,61 +16,64 @@ const Payment = () => {
   const { toast } = useToast();
   const [paymentMethod, setPaymentMethod] = useState('mobile');
   const [loading, setLoading] = useState(false);
-  
-  // Mock service data
-  const getServiceDetails = (serviceId: string) => {
-    const services = {
-      '1': {
-        id: 1,
-        name: 'REGIDESO',
-        amount: 25000,
-        reference: 'REG-2023-12345'
-      },
-      '2': {
-        id: 2,
-        name: 'SNEL',
-        amount: 15000,
-        reference: 'SNEL-2023-67890'
-      },
-      '3': {
-        id: 3,
-        name: 'Vignette Auto',
-        amount: 45000,
-        reference: 'VIG-2023-24680'
-      },
-      '4': {
-        id: 4,
-        name: 'Internet',
-        amount: 35000,
-        reference: 'INT-2023-13579'
+  const [service, setService] = useState({ id: 0, name: '', amount: 0, reference: '' });
+  const [phone, setPhone] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvv, setCvv] = useState('');
+  const [cardName, setCardName] = useState('');
+  const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    const fetchService = async () => {
+      try {
+        const response = await api.get(`/service/${serviceId}`);
+        setService({
+          id: response.data.id,
+          name: response.data.name,
+          amount: 0, // À ajuster selon facture
+          reference: 'INV-' + Date.now(),
+        });
+      } catch (error) {
+        toast({
+          title: 'Erreur',
+          description: 'Impossible de charger les détails du service.',
+          variant: 'destructive',
+        });
       }
     };
-    
-    return services[serviceId as keyof typeof services] || {
-      id: Number(serviceId),
-      name: 'Service inconnu',
-      amount: 0,
-      reference: '-'
-    };
-  };
-  
-  const service = getServiceDetails(serviceId || '1');
-  
-  const handleSubmit = (e: React.FormEvent) => {
+    fetchService();
+  }, [serviceId, toast]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Simulate payment processing
-    setTimeout(() => {
+
+    try {
+      await api.post('/payment', {
+        service_id: service.id,
+        amount: service.amount,
+        payment_method: paymentMethod === 'mobile' ? 'Airtel Money' : paymentMethod === 'card' ? 'Carte bancaire' : 'Portefeuille électronique',
+        phone_number: phone,
+        pin: '1234', // Simulé
+        user_id: JSON.parse(atob(localStorage.getItem('token')?.split('.')[1] || '{}')).sub,
+      });
       toast({
         title: 'Paiement réussi',
         description: `Vous avez payé ${service.amount.toLocaleString()} FC pour ${service.name}`,
       });
       navigate('/history');
+    } catch (error) {
+      toast({
+        title: 'Erreur',
+        description: 'Impossible de traiter le paiement.',
+        variant: 'destructive',
+      });
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
-  
+
   return (
     <Layout title="Paiement">
       <div className="p-4 md:p-6">
@@ -78,7 +81,7 @@ const Payment = () => {
           <h1 className="text-2xl font-bold text-gray-800">Paiement</h1>
           <p className="text-gray-600">{service.name} - {service.reference}</p>
         </div>
-        
+
         <Card className="mb-6">
           <CardContent className="p-6">
             <div className="space-y-4">
@@ -86,12 +89,10 @@ const Payment = () => {
                 <p className="text-sm text-gray-500">Montant à payer</p>
                 <p className="text-2xl font-bold">{service.amount.toLocaleString()} FC</p>
               </div>
-              
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-500">Service</p>
                 <p className="font-medium">{service.name}</p>
               </div>
-              
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-500">Référence</p>
                 <p className="font-medium">{service.reference}</p>
@@ -99,7 +100,7 @@ const Payment = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <h2 className="text-lg font-semibold mb-3">Méthode de paiement</h2>
@@ -114,7 +115,6 @@ const Payment = () => {
                   </div>
                 </Label>
               </div>
-              
               <div className="flex items-center space-x-2 border rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
                 <RadioGroupItem value="card" id="card" />
                 <Label htmlFor="card" className="flex items-center cursor-pointer">
@@ -125,7 +125,6 @@ const Payment = () => {
                   </div>
                 </Label>
               </div>
-              
               <div className="flex items-center space-x-2 border rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
                 <RadioGroupItem value="wallet" id="wallet" />
                 <Label htmlFor="wallet" className="flex items-center cursor-pointer">
@@ -138,54 +137,51 @@ const Payment = () => {
               </div>
             </RadioGroup>
           </div>
-          
+
           {paymentMethod === 'mobile' && (
             <div className="space-y-4 mb-6">
               <div className="space-y-2">
                 <Label htmlFor="phone">Numéro de téléphone</Label>
-                <Input id="phone" placeholder="Ex: 099 123 4567" required />
+                <Input id="phone" placeholder="Ex: 099 123 4567" value={phone} onChange={e => setPhone(e.target.value)} required />
               </div>
             </div>
           )}
-          
+
           {paymentMethod === 'card' && (
             <div className="space-y-4 mb-6">
               <div className="space-y-2">
                 <Label htmlFor="card-number">Numéro de carte</Label>
-                <Input id="card-number" placeholder="1234 5678 9012 3456" required />
+                <Input id="card-number" placeholder="1234 5678 9012 3456" value={cardNumber} onChange={e => setCardNumber(e.target.value)} required />
               </div>
-              
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="expiry">Date d'expiration</Label>
-                  <Input id="expiry" placeholder="MM/YY" required />
+                  <Input id="expiry" placeholder="MM/YY" value={expiry} onChange={e => setExpiry(e.target.value)} required />
                 </div>
-                
                 <div className="space-y-2">
                   <Label htmlFor="cvv">CVV</Label>
-                  <Input id="cvv" placeholder="123" required />
+                  <Input id="cvv" placeholder="123" value={cvv} onChange={e => setCvv(e.target.value)} required />
                 </div>
               </div>
-              
               <div className="space-y-2">
                 <Label htmlFor="card-name">Nom sur la carte</Label>
-                <Input id="card-name" placeholder="Jean Dupont" required />
+                <Input id="card-name" placeholder="Jean Dupont" value={cardName} onChange={e => setCardName(e.target.value)} required />
               </div>
             </div>
           )}
-          
+
           {paymentMethod === 'wallet' && (
             <div className="space-y-4 mb-6">
               <div className="space-y-2">
                 <Label htmlFor="email">Email du compte</Label>
-                <Input id="email" type="email" placeholder="email@exemple.com" required />
+                <Input id="email" type="email" placeholder="email@exemple.com" value={email} onChange={e => setEmail(e.target.value)} required />
               </div>
             </div>
           )}
-          
+
           <div className="space-y-4">
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-orange-500 hover:bg-orange-500"
               disabled={loading}
             >
@@ -199,11 +195,10 @@ const Payment = () => {
                 </span>
               )}
             </Button>
-            
-            <Button 
+            <Button
               type="button"
-              variant="outline" 
-              className="w-full" 
+              variant="outline"
+              className="w-full"
               onClick={() => navigate(`/service/${serviceId}`)}
               disabled={loading}
             >

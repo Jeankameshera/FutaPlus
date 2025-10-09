@@ -1,3 +1,4 @@
+// src/App.tsx
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -25,7 +26,7 @@ import RegidesoForm from './services/RegidesoForm';
 import CashPowerForm from "./services/CashPowerForm";
 import TvForm from "./services/TvForm";
 import InternetForm from "./services/InternetForm";
-import ImpotForm from "./services/ImpotForm";
+import ImpotsForm from "./services/ImpotForm";
 import TransportForm from "./services/TransportForm";
 import ObrForm from "./services/ObrForm"; 
 import ForgotPassword from "./pages/ForgotPassword";
@@ -81,7 +82,7 @@ const AppRoutes = ({ initialRoute }: { initialRoute: string }) => {
         <Route path="/cashpower" element={<CashPowerForm />} />
         <Route path="/tv" element={<TvForm/>} />
         <Route path="/service-detail/:id" element={<ServiceDetail />} />
-        <Route path="/impot" element={<ImpotForm />} />
+        <Route path="/impot" element={<ImpotsForm />} />
         <Route path="/transport" element={<TransportForm />} />
         <Route path="/Vignette" element={<ObrForm />} /> 
         

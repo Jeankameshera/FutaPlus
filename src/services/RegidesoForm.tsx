@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '@/components/BottomNav';
+import api from '@/api/api';
+import { useToast } from '@/hooks/use-toast';
 
 export default function RegidesoForm() {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const [step, setStep] = useState(1);
   const [typePaiement] = useState('PostPaid');
@@ -18,40 +21,100 @@ export default function RegidesoForm() {
   const [validationCode, setValidationCode] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [service, setService] = useState(null);
 
-  const handleNext = () => {
+  // Charger les informations du service au montage
+  useEffect(() => {
+    const fetchService = async () => {
+      setIsLoading(true);
+      try {
+        const response = await api.get('/services');
+        const regidesoService = response.data.find(s => s.slug === 'regideso' || s.name.toLowerCase().includes('regideso'));
+        if (!regidesoService) {
+          throw new Error('Service Regideso non trouvé.');
+        }
+        setService(regidesoService);
+      } catch (err) {
+        console.error('Erreur lors de la récupération du service:', err);
+        setError('Erreur lors du chargement du service Regideso.');
+        toast({
+          title: 'Erreur',
+          description: 'Impossible de charger le service Regideso.',
+          variant: 'destructive',
+        });
+        navigate('/dashboard');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchService();
+  }, [toast, navigate]);
+
+  // Charger les factures à l'étape 3
+  useEffect(() => {
+    if (step === 3 && compteur && service) {
+      const fetchInvoices = async () => {
+        setIsLoading(true);
+        try {
+          const response = await api.get(`/services/${encodeURIComponent(service.name)}/invoices?meter=${compteur}`);
+          setFactures(response.data || []);
+        } catch (err) {
+          if (err.response?.data?.error === 'No unpaid invoices found') {
+            setFactures([]);
+          } else {
+            console.error('Erreur lors de la récupération des factures:', err);
+            setError('Erreur lors du chargement des factures.');
+            toast({
+              title: 'Erreur',
+              description: 'Impossible de charger les factures.',
+              variant: 'destructive',
+            });
+          }
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchInvoices();
+    }
+  }, [step, compteur, service, toast]);
+
+  const handleNext = async () => {
     setError('');
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
-
+    try {
       switch (step) {
         case 1:
+          if (!service) {
+            setError('Service non disponible. Veuillez réessayer.');
+            return;
+          }
           setStep(2);
           break;
         case 2:
           if (!/^[0-9]+$/.test(compteur)) {
-            setError("Le numéro de compteur doit contenir uniquement des chiffres.");
+            setError('Le numéro de compteur doit contenir uniquement des chiffres.');
             return;
           }
-          setFactures([
-            { id: 1, mois: 'Avril', montant: 10000 },
-            { id: 2, mois: 'Mars', montant: 9500 },
-            { id: 3, mois: 'Février', montant: 8700 },
-          ]);
-          setSelectedFactures([]);
           setStep(3);
           break;
         case 3:
-          if (selectedFactures.length === 0) {
-            setError("Veuillez sélectionner au moins une facture.");
+          if (factures.length === 0) {
+            setError('Aucune facture disponible pour ce compteur.');
             return;
           }
-          setMontant(selectedFactures.reduce((total, id) => {
-            const facture = factures.find(f => f.id === id);
-            return total + (facture ? facture.montant : 0);
-          }, 0).toString());
+          if (selectedFactures.length === 0) {
+            setError('Veuillez sélectionner au moins une facture.');
+            return;
+          }
+          setMontant(
+            selectedFactures
+              .reduce((total, id) => {
+                const facture = factures.find(f => f.id === id);
+                return total + (facture ? facture.amount : 0);
+              }, 0)
+              .toString()
+          );
           setStep(4);
           break;
         case 4:
@@ -59,7 +122,7 @@ export default function RegidesoForm() {
           break;
         case 5:
           if (!modePaiement) {
-            setError("Veuillez choisir un mode de paiement.");
+            setError('Veuillez choisir un mode de paiement.');
             return;
           }
           setStep(6);
@@ -69,20 +132,42 @@ export default function RegidesoForm() {
           break;
         case 7:
           if (!numeroTelephone) {
-            setError("Veuillez entrer le numéro de téléphone de votre portefeuille.");
+            setError('Veuillez entrer le numéro de téléphone de votre portefeuille.');
             return;
           }
-          if (!validationCode) {
-            setError("Veuillez entrer votre code PIN pour valider l’action.");
+          if (!validationCode || !/^\d{4}$/.test(validationCode)) {
+            setError('Veuillez entrer un code PIN valide (4 chiffres).');
             return;
           }
-          alert("Paiement validé avec succès !");
+          await api.post('/payment', {
+            service_id: service?.id,
+            invoice_numbers: selectedFactures,
+            payment_method: modePaiement,
+            phone_number: numeroTelephone,
+            pin: validationCode,
+            user_id: JSON.parse(atob(localStorage.getItem('token')?.split('.')[1] || '{}')).sub,
+          });
+          toast({
+            title: 'Succès',
+            description: 'Paiement validé avec succès !',
+          });
           resetForm();
+          navigate('/history');
           break;
         default:
           break;
       }
-    }, 1000);
+    } catch (err) {
+      console.error('Erreur lors de la validation du paiement:', err);
+      setError('Erreur lors de la validation du paiement.');
+      toast({
+        title: 'Erreur',
+        description: 'Impossible de valider le paiement.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handlePrev = () => {
@@ -130,11 +215,14 @@ export default function RegidesoForm() {
 
   return (
     <div className="max-w-md mx-auto mt-5 bg-white shadow-xl rounded-xl p-8 space-y-6 relative">
-      <button onClick={goBackToDashboard} className="absolute top-4 left-4 flex items-center text-orange-500 hover:text-orange-600 transition">
-        <ArrowLeft className="w-5 h-5 mr-1" />      
+      <button
+        onClick={goBackToDashboard}
+        className="absolute top-4 left-4 flex items-center text-orange-500 hover:text-orange-600 transition"
+      >
+        <ArrowLeft className="w-5 h-5 mr-1" />
       </button>
 
-      <h1 className="text-3xl font-bold text-center">REGIDESO</h1>
+      <h1 className="text-3xl font-bold text-center">{service?.name || 'REGIDESO'}</h1>
 
       <div className="flex justify-center space-x-2">
         {[1, 2, 3, 4, 5, 6, 7].map(n => (
@@ -143,12 +231,19 @@ export default function RegidesoForm() {
       </div>
 
       <AnimatePresence mode="wait">
-        <motion.div key={step} variants={stepVariants} initial="hidden" animate="visible" exit="exit" className="space-y-4">
+        <motion.div
+          key={step}
+          variants={stepVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="space-y-4"
+        >
           {step === 1 && (
             <div className="space-y-2">
               <p className="font-semibold">Jean Kameshera, voulez-vous payer?</p>
               <div className="bg-gray-100 rounded-lg p-3">
-                <p>{typePaiement} (Payer une Facture)</p>
+                <p>{typePaiement}</p>
               </div>
             </div>
           )}
@@ -160,7 +255,7 @@ export default function RegidesoForm() {
                 type="text"
                 value={compteur}
                 onChange={handleCompteurChange}
-                placeholder="Ex: 1122345585"
+                placeholder="Ex: 12345678"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
               />
             </div>
@@ -169,16 +264,20 @@ export default function RegidesoForm() {
           {step === 3 && (
             <div className="space-y-2">
               <p className="font-semibold">Factures disponibles</p>
-              {factures.map(f => (
-                <label key={f.id} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedFactures.includes(f.id)}
-                    onChange={() => handleFactureToggle(f.id)}
-                  />
-                  <span>{f.mois} - {f.montant.toLocaleString()} BIF</span>
-                </label>
-              ))}
+              {factures.length > 0 ? (
+                factures.map(f => (
+                  <label key={f.id} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedFactures.includes(f.id)}
+                      onChange={() => handleFactureToggle(f.id)}
+                    />
+                    <span>{f.month} - {f.amount.toLocaleString()} BIF</span>
+                  </label>
+                ))
+              ) : (
+                <p className="text-gray-500">Aucune facture disponible.</p>
+              )}
             </div>
           )}
 
@@ -205,10 +304,10 @@ export default function RegidesoForm() {
                 value={modePaiement}
                 onChange={e => setModePaiement(e.target.value)}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-              >                
-                <option value="">-- Sélectionnez --</option>  
+              >
+                <option value="">-- Sélectionnez --</option>
                 <option value="Airtel Money">Airtel Money</option>
-                <option value="Orange Money">Orange Money</option>                
+                <option value="Orange Money">Orange Money</option>
                 <option value="Lumicash">Lumicash</option>
                 <option value="Pesaflash">Pesaflash</option>
               </select>
@@ -219,7 +318,7 @@ export default function RegidesoForm() {
             <div className="space-y-2">
               <p className="font-semibold">Résumé</p>
               <p><strong>Numéro compteur:</strong> {compteur}</p>
-              <p><strong>Factures:</strong> {selectedFactures.map(id => factures.find(f => f.id === id)?.mois).join(', ')}</p>
+              <p><strong>Factures:</strong> {selectedFactures.map(id => factures.find(f => f.id === id)?.month).join(', ')}</p>
               <p><strong>Montant:</strong> {montant} BIF</p>
               <p><strong>Mode de paiement:</strong> {modePaiement}</p>
             </div>
@@ -229,23 +328,19 @@ export default function RegidesoForm() {
             <div className="space-y-2">
               <p className="font-semibold text-center">Voulez-vous valider cette action ?</p>
               <p className="text-sm text-gray-500 text-center">Entrez les informations de votre portefeuille</p>
-
               <input
                 type="text"
                 value={numeroTelephone}
-                onChange={(e) => setNumeroTelephone(e.target.value)}
+                onChange={e => setNumeroTelephone(e.target.value)}
                 placeholder="Numéro de téléphone"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2
-                focus:ring-black text-center"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-center"
               />
-
               <input
                 type="password"
                 value={validationCode}
-                onChange={(e) => setValidationCode(e.target.value)}
+                onChange={e => setValidationCode(e.target.value)}
                 placeholder="PIN"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2
-                focus:ring-black text-center tracking-widest"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-center tracking-widest"
               />
             </div>
           )}
@@ -262,22 +357,19 @@ export default function RegidesoForm() {
 
       <div className="flex justify-between space-x-4">
         {step > 1 && (
-
           <button
             onClick={handlePrev}
             disabled={isLoading}
             className="w-1/2 bg-gray-300 text-orange-500 py-2 rounded-full font-semibold hover:bg-gray-400 transition disabled:opacity-50"
           >
             Précédent
-
           </button>
-
         )}
         <button
           onClick={handleNext}
-          disabled={isLoading}
+          disabled={isLoading || !service}
           className={`w-full ${step > 1 ? 'w-1/2' : 'w-full'} bg-orange-400 text-white py-2 rounded-full font-semibold hover:bg-orange-500 transition disabled:opacity-50`}
-        >          
+        >
           {step < 7 ? 'Suivant' : 'Valider'}
         </button>
       </div>

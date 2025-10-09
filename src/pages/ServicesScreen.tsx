@@ -1,85 +1,94 @@
-import React, { useState, useCallback } from 'react';
-import InteractiveCard from '@/components/InteractiveCard'; // Carte interactive pour chaque service
-import SearchBar from '@/components/ui/search-bar';         // Barre de recherche réutilisable
-import { Button } from '@/components/ui/button';             // Bouton stylisé
-import { ScrollArea } from '@/components/ui/scroll-area';    // Zone scrollable pour la liste
-import { ArrowLeft } from 'lucide-react';                    // Icône de retour
-import { useNavigate } from 'react-router-dom';              // Navigation entre pages
+import React, { useState, useCallback, useEffect } from 'react';
+import InteractiveCard from '@/components/InteractiveCard';
+import SearchBar from '@/components/ui/search-bar';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import api from '@/api/api';
+import { useToast } from '@/hooks/use-toast';
 
-// Type représentant un service public
 interface PublicService {
   id: number;
   name: string;
   category: string;
   description: string;
   image: string;
+  slug: string;
 }
 
-// Import des données mock depuis le fichier dédié (adapté à ta structure)
-import { mockServices } from '@/data/mockServices';
-
 const ServicesScreen: React.FC = () => {
-  const navigate = useNavigate(); //   Hook de navigation
-  const [services, setServices] = useState<PublicService[]>(mockServices); // Liste des services
-  const [searchQuery, setSearchQuery] = useState<string>('');              // Texte recherché
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [services, setServices] = useState<PublicService[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [loading, setLoading] = useState(true);
 
-  // Fonction appelée à chaque recherche dans la barre de recherche
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await api.get('/services');
+        setServices(response.data);
+      } catch (error) {
+        toast({
+          title: 'Erreur',
+          description: 'Impossible de charger les services.',
+          variant: 'destructive',
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchServices();
+  }, [toast]);
+
   const handleSearch = useCallback((query: string) => {
     setSearchQuery(query);
-
     if (!query) {
-      // Si recherche vide, on affiche la liste complète
-      setServices(mockServices);
+      setServices(services);
       return;
     }
-
-    // Filtrer les services selon le texte tapé (sur nom, catégorie et description)
-    const filteredServices = mockServices.filter((service) =>
+    const filteredServices = services.filter((service) =>
       service.name.toLowerCase().includes(query.toLowerCase()) ||
       service.category.toLowerCase().includes(query.toLowerCase()) ||
       service.description.toLowerCase().includes(query.toLowerCase())
     );
-
     setServices(filteredServices);
-  }, []);
+  }, [services]);
 
-  // Gestion du clic sur une carte : naviguer vers la page du service
   const handleCardClick = (service: PublicService) => {
-    console.log('Service sélectionné:', service);    
-    navigate(`/service-detail/${service.id}`); // Exemple : route dynamique selon l’id du service
+    navigate(`/service-detail/${service.id}`);
   };
+
+  if (loading) {
+    return <div className="flex justify-center items-center min-h-screen">Chargement...</div>;
+  }
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
-
-      {/* Bouton de retour en arrière */}
       <Button
         variant="outline"
         className="mb-6"
         onClick={() => {
           if (window.history.length > 2) {
-            navigate(-1); // Revenir à la page précédente
+            navigate(-1);
           } else {
-            navigate('/dashboard'); // Si pas d'historique, aller au dashboard
+            navigate('/dashboard');
           }
         }}
       >
-              
         <ArrowLeft size={16} className="mr-2" />
         Retour
       </Button>
 
-      {/* Titre de la page */}
       <h1 className="text-2xl font-bold mb-6">Mes Services</h1>
 
-      {/* Barre de recherche */}
       <SearchBar
         placeholder="Rechercher un service, une catégorie..."
         onSearch={handleSearch}
         className="mb-6"
       />
 
-      {/* Liste scrollable des services */}
       <ScrollArea className="h-[calc(100vh-200px)]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6">
           {services.length > 0 ? (

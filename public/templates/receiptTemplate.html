@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facture #{id}</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f4f4f4; padding: 20px;">
+        <tr>
+            <td align="center">
+                <table role="presentation" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(to bottom, #0A2647, #113b68); padding: 20px; text-align: center;">
+                            <h1 style="color: #f97316; font-size: 24px; margin: 0;">FuTa+</h1>
+                            <p style="color: #ffffff; font-size: 16px; margin: 10px 0;">Facture #{{id}}</p>
+                        </td>
+                    </tr>
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 30px;">
+                            <h2 style="color: #333333; font-size: 20px; margin-top: 0;">Bonjour {{first_name}} {{last_name}},</h2>
+                            <p style="color: #555555; font-size: 16px; line-height: 1.5;">
+                                Voici les détails de votre facture :
+                            </p>
+                            <table role="presentation" width="100%" style="border-collapse: collapse; margin: 20px 0;">
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Service</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">{{service_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Mois</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">{{month}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Numéro de compteur</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">{{meter_number}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Montant</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">{{amount}} BIF</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Statut</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">{{status}}</td>
+                                </tr>
+                            </table>
+                            <p style="color: #555555; font-size: 16px; line-height: 1.5;">
+                                Veuillez effectuer le paiement avant la date d'échéance pour éviter toute interruption de service.
+                            </p>
+                            <p style="color: #555555; font-size: 16px; line-height: 1.5;">
+                                Merci,<br>
+                                L'équipe FuTa+
+                            </p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f4f4f4; text-align: center; padding: 20px; color: #777777; font-size: 14px;">
+                            <p style="margin: 0;">© 2025 FuTa+. Tous droits réservés.</p>
+                            <p style="margin: 5px 0;">Support : <a href="mailto:support@futa.com" style="color: #f97316; text-decoration: none;">support@futa.com</a></p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
