@@ -47,6 +47,7 @@ const Dashboard = () => {
   const [profileImage, setProfileImage] = useState('https://via.placeholder.com/150');
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState('');
   const BASE_URL = 'http://localhost:8000';
 
   // Charger les données utilisateur et services au montage
@@ -82,6 +83,8 @@ const Dashboard = () => {
               ? `${BASE_URL}${userResponse.data.profile_image}`
               : 'https://via.placeholder.com/150'
           );
+          // Récupérer le rôle de l'utilisateur
+          setUserRole(userResponse.data.role || 'user');
         } else {
           throw new Error(userResponse.data.error || 'Failed to load user data');
         }
@@ -128,6 +131,9 @@ const Dashboard = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Vérifier si l'utilisateur est administrateur
+  const isAdmin = userRole === 'admin';
+
   if (loading) {
     return <div className="flex justify-center items-center min-h-screen">Chargement...</div>;
   }
@@ -148,6 +154,11 @@ const Dashboard = () => {
           <div>
             <h2 className="text-lg font-semibold">{firstName} {lastName}</h2>
             <p className="text-sm text-gray-600">{phone || 'Non défini'}</p>
+            {isAdmin && (
+              <span className="inline-block bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full mt-1">
+                Administrateur
+              </span>
+            )}
           </div>
         </div>
 
@@ -177,6 +188,20 @@ const Dashboard = () => {
                 <User className="w-5 h-5 text-orange-600" />
                 Mon Compte
               </button>
+
+              {/* Afficher le bouton Dashboard seulement pour les administrateurs */}
+              {isAdmin && (
+                <button
+                  onClick={() => {
+                    navigate('/admin/dashboard');
+                    setShowMenu(false);
+                  }}
+                  className="flex items-center gap-3 w-full px-4 py-3 text-sm hover:bg-orange-50 transition"
+                >
+                  <User className="w-5 h-5 text-orange-600" />
+                  Dashboard
+                </button>
+              )}
 
               <button
                 onClick={() => {

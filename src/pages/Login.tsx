@@ -20,7 +20,6 @@ const Login = () => {
 
     try {
       const response = await api.post('/login', { email, password });
-      console.log('Login response:', response.data);
       if (response.data.success) {
         const { token, user } = response.data;
         localStorage.setItem('token', token);
@@ -35,13 +34,18 @@ const Login = () => {
         });
         navigate('/dashboard');
       } else {
-        throw new Error(response.data.error || 'Login failed');
+        console.log(response.data.error || 'Login failed. Please try again');
+        toast({
+          title: 'Erreur de connexion.',
+          description: response.data.error,
+          variant: 'destructive',
+        });
       }
     } catch (err: any) {
       console.error('Login error:', err);
       toast({
         title: 'Erreur de connexion',
-        description: err.response?.data?.error || 'Identifiants incorrects. Veuillez réessayer.',
+        description: err.response?.data?.error || 'Veuillez reéessayer..',
         variant: 'destructive',
       });
     } finally {

@@ -1,7 +1,12 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, Users, FileText, Wrench, CreditCard, Power, Gauge } from "lucide-react";
+import { LayoutDashboard, Users, FileText, Wrench, CreditCard, Power, Gauge, User } from "lucide-react";
 
-const Sidebar = () => {
+interface SidebarProps {
+  userName?: string;
+  userRole?: string;
+}
+
+const Sidebar = ({ userName = "Utilisateur", userRole = "Administrateur" }: SidebarProps) => {
   const navLinks = [
     { name: "Dashboard", path: "/admin/dashboard", icon: <LayoutDashboard size={15} /> },
     { name: "Rôles", path: "/admin/roles", icon: <Users size={15} /> },
@@ -11,11 +16,29 @@ const Sidebar = () => {
     { name: "Compteurs", path: "/admin/compteurs", icon: <Gauge size={15} /> },
   ];
 
+  // Fonction déconnexion
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userRole');
+    window.location.href = "/login";
+  };
+
+  // Générer initiales
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+  };
+
   return (
     <aside className="w-50 bg-white shadow-md flex flex-col">
       {/* Logo */}
       <div className="p-6 border-b border-gray-200">
-          <h1 className="text-4xl font-extrabold text-orange-600">FuTa+</h1>        
+        <h1 className="text-4xl font-extrabold text-orange-600">FuTa+</h1>        
       </div>
 
       {/* Navigation */}
@@ -38,11 +61,14 @@ const Sidebar = () => {
 
       {/* Déconnexion */}
       <div className="p-4 border-t border-gray-200">
-           <NavLink to="/login"
-           className="flex items-center gap-6 text-red-500 hover:text-red-700"
-          >
-              <Power size={18} />Déconnexion </NavLink>
-       </div>
+        <button 
+          onClick={handleLogout}
+          className="flex items-center gap-3 text-red-500 hover:text-red-700 w-full"
+        >
+          <Power size={18} />
+          <span>Déconnexion</span>
+        </button>
+      </div>
     </aside>
   );
 };

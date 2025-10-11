@@ -55,10 +55,7 @@
     "html2pdf.js": "^0.12.1",
     "input-otp": "^1.2.4",
     "jspdf": "^3.0.3",
-<<<<<<< HEAD
-=======
     "jspdf-autotable": "^5.0.2",
->>>>>>> 842e3091dce1e110c1213289f94b1dbc169bddd7
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",
     "react": "^18.3.1",
